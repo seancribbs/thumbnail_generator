@@ -12,12 +12,7 @@ defmodule Thumbs.Application do
     children =
       [
         ThumbsWeb.Telemetry,
-        Thumbs.Repo,
-        !flame_parent &&
-          {DNSCluster, query: Application.get_env(:thumbs, :dns_cluster_query) || :ignore},
         {Phoenix.PubSub, name: Thumbs.PubSub},
-        # Start the Finch HTTP client for sending emails
-        !flame_parent && {Finch, name: Thumbs.Finch},
         # Start a worker by calling: Thumbs.Worker.start_link(arg)
         # {Thumbs.Worker, arg},
         # Start to serve requests, typically the last entry

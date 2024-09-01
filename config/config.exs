@@ -7,9 +7,7 @@
 # General application configuration
 import Config
 
-config :thumbs,
-  ecto_repos: [Thumbs.Repo],
-  generators: [timestamp_type: :utc_datetime]
+config :thumbs, generators: [timestamp_type: :utc_datetime]
 
 # Configures the endpoint
 config :thumbs, ThumbsWeb.Endpoint,
