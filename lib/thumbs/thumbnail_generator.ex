@@ -49,6 +49,7 @@ defmodule Thumbs.ThumbnailGenerator do
         gen = %ThumbnailGenerator{ref: ref, exec_pid: exec_pid, pid: self(), caller: caller}
         send(parent, {parent_ref, gen})
         Process.monitor(caller)
+        Logger.info("Spawned ffmpeg")
         {:ok, %{gen: gen, count: 0, current: nil}}
 
       other ->
