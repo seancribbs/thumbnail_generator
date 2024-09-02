@@ -24,7 +24,7 @@ defmodule Thumbs.ThumbnailGenerator do
 
   def open(opts \\ []) do
     Keyword.validate!(opts, [:timeout, :caller, :fps])
-    timeout = Keyword.get(opts, :timeout, 5_000)
+    timeout = Keyword.get(opts, :timeout, 75_000)
     caller = Keyword.get(opts, :caller, self())
     parent_ref = make_ref()
     parent = self()
