@@ -23,7 +23,8 @@ defmodule Thumbs.Application do
          min: 0,
          max: 10,
          max_concurrency: 5,
-         idle_shutdown_after: 10_000,
+         idle_shutdown_after: 30_000,
+         boot_timeout: 60_000,
          log: :debug},
         !flame_parent && ThumbsWeb.Endpoint
       ]
