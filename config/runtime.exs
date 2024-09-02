@@ -36,7 +36,7 @@ if config_env() == :prod do
   config :flame, :backend, FLAME.RailwayBackend
 
   config :flame, FLAME.RailwayBackend,
-    source: %{repo: "seancribbs/thumbnail_generator"},
+    source: %{image: "seancribbs/thumbnail_generator"},
     env: %{
       "SECRET_KEY_BASE" => secret_key_base,
       "RAILWAY_TOKEN" => "${{ shared.RAILWAY_TOKEN }}"
