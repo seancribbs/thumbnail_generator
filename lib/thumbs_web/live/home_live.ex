@@ -4,12 +4,19 @@ defmodule ThumbsWeb.HomeLive do
   def render(assigns) do
     ~H"""
     <.form for={%{}} phx-change="validate" phx-submit="save">
-      <div class="space-y-4 relative">
-        <h1 class="text-xl"><%= @message %></h1>
-        <.live_file_input upload={@uploads.video} />
+      <div class="space-y-2">
+        <div id="droptarget"
+          class="rounded-lg min-h-12 p-5 text-center bg-zinc-900"
+          phx-hook="DragDrop"
+          phx-drop-target={@uploads.video.ref}
+          >
+          <%= @message %>
+          <.live_file_input upload={@uploads.video} class="hidden"/>
+        </div>
+
         <div :for={entry <- @uploads.video.entries}>
           <div class="w-full bg-gray-200 rounded-full h-2.5">
-            <div class="bg-blue-600 h-2.5 rounded-full" style={"width: #{entry.progress}%"}></div>
+            <div class="bg-lime-500 h-2.5 rounded-full" style={"width: #{entry.progress}%"}></div>
           </div>
         </div>
 
@@ -29,7 +36,7 @@ defmodule ThumbsWeb.HomeLive do
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> assign(message: "Select an .mp4 file to generate thumbnails", count: 0)
+     |> assign(message: "Drop a file here to extract thumbnails!", count: 0)
      |> stream(:thumbs, [])
      |> allow_upload(:video,
        accept: ~w(.mp4),
@@ -56,6 +63,11 @@ defmodule ThumbsWeb.HomeLive do
     {:noreply, socket}
   end
 
+  def handle_async(:reset_message, _, socket) do
+    {:noreply, assign(socket, message: "Drop a file here to extract thumbnails!")}
+  end
+
+
   def handle_info({_ref, :image, _count, encoded}, socket) do
     %{count: count} = socket.assigns
 
@@ -66,8 +78,19 @@ defmodule ThumbsWeb.HomeLive do
   end
 
   def handle_info({_ref, :ok, total_count}, socket) do
-    {:noreply, assign(socket, message: "#{total_count} thumbnails generated!")}
+    socket =
+      socket
+      |> assign(message: "#{total_count} thumbnails generated!")
+      |> start_async(:reset_message, fn ->
+        receive do
+          _ -> :ok
+        after
+          2500 -> :ok
+        end
+        end)
+    {:noreply, socket}
   end
+
 
   def handle_event("validate", _params, socket) do
     {:noreply,
