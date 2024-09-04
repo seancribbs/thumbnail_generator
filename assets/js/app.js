@@ -29,7 +29,7 @@ Hooks.DragDrop = {
     ["dragenter", "dragover"].forEach((eventName) => {
       dropArea.addEventListener(eventName, highlight, false);
     });
-    ["drageleave", "drop"].forEach((eventName) => {
+    ["dragleave", "drop"].forEach((eventName) => {
       dropArea.addEventListener(eventName, unhighlight, false);
     });
 
@@ -57,7 +57,7 @@ let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
 let liveSocket = new LiveSocket("/live", Socket, {
-  timeout: 20000,
+  timeout: 60000,
   params: { _csrf_token: csrfToken },
   hooks: Hooks,
 });
